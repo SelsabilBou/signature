@@ -1,17 +1,34 @@
 import numpy as np
 
 
-def extract_features(roi, width, height):
+def extract_basic_features(image):
+    features = {}
+
+    black_pixels = np.sum(image > 0)
+
+    if black_pixels == 0:
+        features['width'] = 0
+        features['height'] = 0
+        features['black_pixels'] = 0
+        return features
+
+    ys, xs = np.where(image > 0)
+
+    features['width'] = xs.max() - xs.min() + 1
+    features['height'] = ys.max() - ys.min() + 1
+    features['black_pixels'] = black_pixels
+
+    return features
+
+
+def extract_advanced_features(image):
     """
     roi : image de la région d'intérêt (numpy array, 0 = noir, 255 = blanc)
     width, height : largeur et hauteur de la ROI
     Retourne un dictionnaire avec width, height, black_pixels.
     """
-    if roi is None:
-        return {"width": 0, "height": 0, "black_pixels": 0}
 
-    # Pixels noirs = valeur 0
-    black_pixels = int((roi == 0).sum())
+    features = {}
 
     return {
         "width": int(width),
