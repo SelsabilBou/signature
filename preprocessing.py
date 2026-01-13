@@ -1,4 +1,3 @@
-# preprocessing.py
 import cv2
 import numpy as np
 from PIL import Image
@@ -145,6 +144,15 @@ def preprocess_pipeline(path):
     save_processed_image(roi, "step5_roi.png")
 
     return roi, w, h
+
+
+# -------- Alias utilisé par verification.py --------
+
+def preprocess_signature(path):
+    """
+    Wrapper pour rester compatible avec verification.py
+    """
+    return preprocess_pipeline(path)
 
 
 # -------- Test rapide du module 2 --------

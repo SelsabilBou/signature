@@ -1,4 +1,3 @@
-# verification.py
 import logging
 
 from preprocessing import preprocess_signature
@@ -10,11 +9,16 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
+
 def compute_distance(ref_features, test_features):
-    dx = ref_features["width"]  - test_features["width"]
+    """
+    Distance euclidienne simple sur width, height, black_pixels.
+    """
+    dx = ref_features["width"] - test_features["width"]
     dy = ref_features["height"] - test_features["height"]
     db = ref_features["black_pixels"] - test_features["black_pixels"]
-    return (dx**2 + dy**2 + db**2) ** 0.5
+    return (dx ** 2 + dy ** 2 + db ** 2) ** 0.5
+
 
 def verify_signature(input_image_path, reference_path, threshold=1000.0):
     """
@@ -26,7 +30,7 @@ def verify_signature(input_image_path, reference_path, threshold=1000.0):
     logging.info(f"Image référence: {reference_path}")
 
     # 1) Prétraitement des deux images
-    roi_in,  w_in,  h_in  = preprocess_signature(input_image_path)
+    roi_in, w_in, h_in = preprocess_signature(input_image_path)
     roi_ref, w_ref, h_ref = preprocess_signature(reference_path)
 
     if roi_in is None or roi_ref is None:
@@ -40,7 +44,7 @@ def verify_signature(input_image_path, reference_path, threshold=1000.0):
 
     # 3) Extraction des caractéristiques
     feat_input = extract_features(roi_in, w_in, h_in)
-    feat_ref   = extract_features(roi_ref, w_ref, h_ref)
+    feat_ref = extract_features(roi_ref, w_ref, h_ref)
 
     logging.info(f"Features ref : {feat_ref}")
     logging.info(f"Features in  : {feat_input}")
@@ -50,16 +54,15 @@ def verify_signature(input_image_path, reference_path, threshold=1000.0):
     logging.info(f"Distance = {dist:.2f} (seuil = {threshold})")
 
     if dist <= threshold:
-        msg = "✅ C'EST LA SIGNATURE DE SELSABIL !"
+        msg = " C'EST LA SIGNATURE DE SELSABIL !"
         logging.info("Résultat : MATCH")
         return True, msg
     else:
-        msg = "❌ Signature non reconnue."
+        msg = "Signature non reconnue."
         logging.info("Résultat : NO MATCH")
         return False, msg
 
 
-# petit test en ligne de commande
 if __name__ == "__main__":
     ok, msg = verify_signature("image_test.png", "image_test.png")
     print(msg)
