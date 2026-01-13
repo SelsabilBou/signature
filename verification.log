@@ -1,0 +1,7 @@
+2026-01-13 20:47:40,828 - INFO - Début vérification
+2026-01-13 20:47:40,828 - INFO - Image entrée   : image_test.png
+2026-01-13 20:47:40,828 - INFO - Image référence: image_test.png
+2026-01-13 20:47:40,882 - INFO - Features ref : {'width': 312, 'height': 147, 'black_pixels': 1821}
+2026-01-13 20:47:40,882 - INFO - Features in  : {'width': 312, 'height': 147, 'black_pixels': 1821}
+2026-01-13 20:47:40,882 - INFO - Distance = 0.00 (seuil = 1000.0)
+2026-01-13 20:47:40,882 - INFO - Résultat : MATCH

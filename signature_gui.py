@@ -106,17 +106,20 @@ class SignatureApp:
         """
         Capture le contenu du canvas et l'enregistre en PNG.
         """
-        # Position absolue du canvas sur l'écran
-        x = self.canvas.winfo_rootx()
-        y = self.canvas.winfo_rooty()
-        x1 = x + self.canvas_width
-        y1 = y + self.canvas_height
+        self.canvas.update()
+
+        # Petite marge autour du canvas pour ne pas couper les traits
+        margin = 2
+        x = self.canvas.winfo_rootx() + margin
+        y = self.canvas.winfo_rooty() + margin
+        x1 = x + self.canvas_width - 2 * margin
+        y1 = y + self.canvas_height - 2 * margin
 
         img = ImageGrab.grab(bbox=(x, y, x1, y1))
         img = img.convert("L")  # gris (optionnel)
         img.save(path)
 
-    def count_black_pixels(self, img_path, threshold=200):
+    def count_black_pixels(self, img_path, threshold=220):
         """
         Retourne le nombre de pixels "sombres" (noirs) dans l'image.
         """
@@ -137,10 +140,15 @@ class SignatureApp:
             messagebox.showerror("Erreur", "Impossible d'analyser l'image dessinée.")
             return
 
-        if black_pixels < 100:
+        # Seuil plus faible pour ne pas bloquer trop souvent
+        MIN_BLACK_PIXELS = 20
+
+        if black_pixels < MIN_BLACK_PIXELS:
             messagebox.showwarning(
                 "Dessin insuffisant",
-                "La signature est trop petite ou vide.\nDessine davantage avant de vérifier."
+                f"La signature est trop petite ou vide.\n"
+                f"Pixels noirs détectés : {black_pixels}.\n"
+                f"Dessine davantage avant de vérifier."
             )
             return
 
